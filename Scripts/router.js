@@ -1,49 +1,101 @@
-"use strict";
-var core;
-(function (core) {
-    class Router {
-        m_activeLink;
-        m_linkData;
-        m_routingTable;
-        get ActiveLink() {
+(function(core){
+
+    class Router
+    {
+        // public properties (getters and setters)
+        get ActiveLink()
+        {
             return this.m_activeLink;
         }
-        set ActiveLink(link) {
+
+        set ActiveLink(link)
+        {
             this.m_activeLink = link;
         }
-        get LinkData() {
-            return this.m_linkData;
+
+        // constructor
+
+        /**
+         * Creates an instance of Router.
+         * 
+         * @constructor
+         */
+        constructor()
+        {
+            this.ActiveLink = "";
         }
-        set LinkData(data) {
-            this.m_linkData = data;
-        }
-        constructor() {
-            this.m_activeLink = "";
-            this.m_linkData = "";
-            this.m_routingTable = [];
-        }
-        Add(route) {
+        
+        // public methods
+
+        /**
+         * Adds a new route to the Routing table
+         *
+         * @param {string} route
+         */
+        Add(route)
+        {
             this.m_routingTable.push(route);
         }
-        AddTable(routingTable) {
+
+        /**
+         * This replaces the current routing table with a new one
+         * Routes should begin with '/' character
+         * 
+         * @param {string[]} routingTable
+         */
+        AddTable(routingTable)
+        {
             this.m_routingTable = routingTable;
         }
-        Find(route) {
+
+        /**
+         * This method finds the index of the route in the routing table
+         * otherwise it returns -1 if the route is not found
+         *
+         * @param {string} route
+         * @returns {number}
+         */
+        Find(route)
+        {
             return this.m_routingTable.indexOf(route);
         }
-        Remove(route) {
-            if (this.Find(route) > -1) {
+
+        /**
+         * This method removes a route from the Routing Table
+         * It returns true if the route was successfully removed,
+         * otherwise it returns false
+         *
+         * @param {string} route
+         * @returns {boolean}
+         */
+        Remove(route)
+        {
+            if(this.Find(route) > -1)
+            {
                 this.m_routingTable.splice(this.Find(route), 1);
                 return true;
             }
             return false;
         }
-        toString() {
+
+        // overridden methods
+
+        /**
+         * This method overrides the built-in toString method and returns the entire routing table as a string
+         * 
+         * @override
+         * @returns {string}
+         */
+        toString()
+        {
             return this.m_routingTable.toString();
         }
     }
+
     core.Router = Router;
+
 })(core || (core = {}));
+
 let router = new core.Router();
 router.AddTable([
     "/",
@@ -57,11 +109,15 @@ router.AddTable([
     "/login",
     "/edit"
 ]);
-let route = location.pathname;
-if (router.Find(route) > -1) {
+
+let route = location.pathname; // alias for location.pathname
+
+if(router.Find(route) > -1)
+{
     router.ActiveLink = (route == "/") ? "home" : route.substring(1);
 }
-else {
-    router.ActiveLink = "404";
+else
+{
+    router.ActiveLink = "404"; // file not found
 }
-//# sourceMappingURL=router.js.map
+
